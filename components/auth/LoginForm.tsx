@@ -2,7 +2,7 @@
 import * as z from 'zod';
 import React, { useState } from "react";
 import CardWrapper from "@/components/auth/CardWrapper";
-import { LoginSchemas } from '@/schemas';
+import { LoginSchema } from '@/schemas';
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -25,15 +25,15 @@ export default function LoginForm() {
     const [success, setSuccess] = useState<string | undefined>("")
     const [isPending, startTransition] = useTransition()
 
-    const form = useForm<z.infer<typeof LoginSchemas>>({
-        resolver: zodResolver(LoginSchemas),
+    const form = useForm<z.infer<typeof LoginSchema>>({
+        resolver: zodResolver(LoginSchema),
         defaultValues: {
             email: '',
             password: ''
         }
     })
 
-    const onSubmit = (values: z.infer<typeof LoginSchemas>) => {
+    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         setError('')
         setSuccess('')
 
