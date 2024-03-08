@@ -1,9 +1,16 @@
 'use client'
 import LoginForm from '@/components/auth/LoginForm'
-import React from 'react'
+import React, { Suspense } from 'react'
+
+
+function SearchBarFallback() {
+    return <>placeholder</>
+}
 
 export default function LoginPage() {
     return (
-        <LoginForm />
+        <Suspense fallback={<SearchBarFallback />}>
+            <LoginForm />
+        </Suspense>
     )
 }

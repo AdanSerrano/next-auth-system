@@ -1,6 +1,6 @@
 
 'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 import {
     Card,
     CardContent,
@@ -11,6 +11,12 @@ import Header from '@/components/auth/Header'
 import BackButton from '@/components/auth/BackButton'
 import { Social } from './Social'
 
+
+
+function SearchBarFallback() {
+    return <>placeholder</>
+}
+
 interface CardWrapperProps {
     children: React.ReactNode,
     headerLabel: string,
@@ -18,6 +24,7 @@ interface CardWrapperProps {
     backButtonHref: string,
     showSocial?: boolean
 }
+
 
 export default function CardWrapper({
     children,
@@ -36,7 +43,9 @@ export default function CardWrapper({
             </CardContent>
             {showSocial && (
                 <CardFooter>
-                    <Social />
+                    <Suspense fallback={<SearchBarFallback />}>
+                        <Social />
+                    </Suspense>
                 </CardFooter>
             )}
             <CardFooter>
