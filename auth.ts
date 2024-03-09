@@ -29,24 +29,15 @@ export const {
     },
     callbacks: {
         async signIn({ user, account }) {
-            // Allow OAuth without email verification
-            if (account?.provider !== "credentials") return true;
 
-            const existingUser = await getUserById(user.id);
+            if (account?.provider !== 'credentials') return true;
 
-            // Prevent sign in without email verification
+            const existingUser = await getUserById(user.id)
+            // prevent login if email is not verified
             if (!existingUser?.emailVerified) return false;
 
-            // if (existingUser.isTwoFactorEnabled) {
-            //     const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
 
-            //     if (!twoFactorConfirmation) return false;
-
-            //     // Delete two factor confirmation for next sign in
-            //     await db.twoFactorConfirmation.delete({
-            //         where: { id: twoFactorConfirmation.id }
-            //     });
-            // }
+            // TODO : Add two factor authentication
 
             return true;
         },
