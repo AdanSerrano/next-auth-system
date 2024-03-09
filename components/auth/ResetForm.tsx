@@ -1,12 +1,10 @@
 'use client'
 import * as z from 'zod';
 import { useTransition } from 'react';
-import Link from 'next/link';
 import React, { useState } from "react";
-import { LoginSchema } from '@/schemas';
+import { ResetPasswordSchema } from '@/schemas';
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useSearchParams } from 'next/navigation';
 
 
 import CardWrapper from '@/components/auth/CardWrapper';
@@ -22,32 +20,27 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/FormError';
 import { FormSuccess } from '@/components/FormSuccess';
-import { Login } from '@/actions/Login';
+import { Reset } from '@/actions/Reset';
 
 
-export default function LoginForm() {
-    const searchParams = useSearchParams()
-    const urlError = searchParams.get('error') === 'OAuthAccountNotLinked'
-        ? 'Email already in use with different provider'
-        : ''
+export default function ResetPasswordForm() {
     const [error, setError] = useState<string | undefined>("")
     const [success, setSuccess] = useState<string | undefined>("")
     const [isPending, startTransition] = useTransition()
 
-    const form = useForm<z.infer<typeof LoginSchema>>({
-        resolver: zodResolver(LoginSchema),
+    const form = useForm<z.infer<typeof ResetPasswordSchema>>({
+        resolver: zodResolver(ResetPasswordSchema),
         defaultValues: {
             email: '',
-            password: ''
         }
     })
 
-    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    const onSubmit = (values: z.infer<typeof ResetPasswordSchema>) => {
         setError('')
         setSuccess('')
 
         startTransition(() => {
-            Login(values).then((data) => {
+            Reset(values).then((data) => {
                 setError(data?.error),
                     setSuccess(data?.success)
             })
@@ -56,10 +49,9 @@ export default function LoginForm() {
 
     return (
         <CardWrapper
-            headerLabel='Welcome back'
-            backButtonLabel='Don’t have an account? Sign up'
-            backButtonHref='/auth/register'
-            showSocial
+            headerLabel='Forgot your password?'
+            backButtonLabel='Back to login'
+            backButtonHref='/auth/login'
         >
             <Form {...form}>
                 <form
@@ -87,45 +79,16 @@ export default function LoginForm() {
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name='password'
-                            disabled={isPending}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        Password
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder='*****'
-                                            type='password'
-                                        />
-                                    </FormControl>
-                                    <Button
-                                        size={'sm'}
-                                        variant={'link'}
-                                        asChild
-                                        className='px-0 font-normal'
-                                    >
-                                        <Link href={'/auth/reset-password'}>
-                                            Forgot password?
-                                        </Link>
-                                    </Button>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+
                     </div>
-                    <FormError message={error || urlError} />
+                    <FormError message={error} />
                     <FormSuccess message={success} />
                     <Button
                         type='submit'
                         className='w-full '
                         disabled={isPending}
                     >
-                        Login
+                        Send Reset Email
                     </Button>
                 </form>
             </Form>

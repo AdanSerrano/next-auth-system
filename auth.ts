@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import authConfig from "@/auth.config";
 import { getUserById } from "@/data/user";
+import { sendVerificationEmailLogin } from "./lib/mail";
 // import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 // import { getAccountByUserId } from "./data/account";
 
@@ -18,6 +19,7 @@ export const {
     pages: {
         signIn: "/auth/login",
         error: "/auth/error",
+        verifyRequest: "/auth/verification"
     },
     events: {
         async linkAccount({ user }) {
@@ -29,6 +31,11 @@ export const {
     },
     callbacks: {
         async signIn({ user, account }) {
+            // console.log({
+            //     user,
+            // })
+
+            console.log({ user, account })
 
             if (account?.provider !== 'credentials') return true;
 
