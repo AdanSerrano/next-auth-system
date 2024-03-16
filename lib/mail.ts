@@ -2,12 +2,24 @@ import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+export const sendToFactorTokenEmail = async (
+    email: string,
+    token: string
+) => {
+    await resend.emails.send({
+        from: 'Factor Token <onborading@fesa.com.pa>',
+        to: email,
+        subject: '2FA Token!',
+        html: `<p>Your factor token is: ${token}</p>`
+    })
+}
+
 export const sendVerificationEmail = async (
     email: string,
     token: string
 ) => {
 
-    const confirmLink = `http://localhost:3000/auth/new-verification?token=${token}`
+    const confirmLink = `${process.env.NEXT_PUBLIC_URL}/auth/new-verification?token=${token}`
 
     await resend.emails.send({
         from: 'Verification Email <onborading@fesa.com.pa>',
@@ -34,7 +46,7 @@ export const sendPasswordResetEmail = async (
     token: string
 ) => {
 
-    const resetLink = `http://localhost:3000/auth/new-password?token=${token}`
+    const resetLink = `${process.env.NEXT_PUBLIC_URL}/auth/new-password?token=${token}`
 
     await resend.emails.send({
         from: 'ResetPassword <onborading@fesa.com.pa>',

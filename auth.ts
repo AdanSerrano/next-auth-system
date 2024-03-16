@@ -5,8 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import authConfig from "@/auth.config";
 import { getUserById } from "@/data/user";
-import { sendVerificationEmailLogin } from "./lib/mail";
-// import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
+import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 // import { getAccountByUserId } from "./data/account";
 
 export const {
@@ -35,13 +34,23 @@ export const {
             //     user,
             // })
 
-            console.log({ user, account })
+            // console.log({ user, account })
 
             if (account?.provider !== 'credentials') return true;
 
             const existingUser = await getUserById(user.id)
             // prevent login if email is not verified
             if (!existingUser?.emailVerified) return false;
+
+            if (existingUser.isTwoFactorEnabled) {
+                const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id)
+                if (!twoFactorConfirmation) return false;
+
+                // delete two factor confirmation
+                await db.twoFactorConfirmation.delete({
+                    where: { id: twoFactorConfirmation.id }
+                });
+            }
 
 
             // TODO : Add two factor authentication

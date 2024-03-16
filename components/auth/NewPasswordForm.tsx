@@ -20,10 +20,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/FormError';
 import { FormSuccess } from '@/components/FormSuccess';
-import { Reset } from '@/actions/Reset';
+import { useSearchParams } from 'next/navigation';
+import { NewPassword } from '@/actions/new-password';
 
 
 export default function NewPasswordForm() {
+    const searchParams = useSearchParams()
+    const token = searchParams.get('token')
+
     const [error, setError] = useState<string | undefined>("")
     const [success, setSuccess] = useState<string | undefined>("")
     const [isPending, startTransition] = useTransition()
@@ -39,12 +43,12 @@ export default function NewPasswordForm() {
         setError('')
         setSuccess('')
 
-        // startTransition(() => {
-        //     Reset(values).then((data) => {
-        //         setError(data?.error),
-        //             setSuccess(data?.success)
-        //     })
-        // })
+        startTransition(() => {
+            NewPassword(values, token).then((data) => {
+                setError(data?.error),
+                    setSuccess(data?.success)
+            })
+        })
     }
 
     return (
