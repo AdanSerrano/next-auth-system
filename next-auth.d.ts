@@ -1,12 +1,13 @@
 import authConfig from '@/auth.config'
 import { UserRole } from '@prisma/client'
-import NextAuth from "next-auth"
+import NextAuth, { DefaultSession } from "next-auth"
 
 
 declare module "next-auth" {
     interface User {
         id: string;
         role: UserRole
+        isTwoFactorEnabled: boolean
     }
 }
 

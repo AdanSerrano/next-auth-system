@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/FormError';
 import { FormSuccess } from '@/components/FormSuccess';
 import { Login } from '@/actions/Login';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../ui/input-otp';
 
 
 export default function LoginForm() {
@@ -91,11 +92,23 @@ export default function LoginForm() {
                                             Two Factor Code
                                         </FormLabel>
                                         <FormControl>
-                                            <Input
+                                            <InputOTP
                                                 {...field}
+                                                maxLength={6}
                                                 disabled={isPending}
-                                                placeholder='123456'
-                                            />
+                                            >
+                                                <InputOTPGroup>
+                                                    <InputOTPSlot index={0} />
+                                                    <InputOTPSlot index={1} />
+                                                    <InputOTPSlot index={2} />
+                                                </InputOTPGroup>
+                                                <InputOTPSeparator />
+                                                <InputOTPGroup>
+                                                    <InputOTPSlot index={3} />
+                                                    <InputOTPSlot index={4} />
+                                                    <InputOTPSlot index={5} />
+                                                </InputOTPGroup>
+                                            </InputOTP>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
