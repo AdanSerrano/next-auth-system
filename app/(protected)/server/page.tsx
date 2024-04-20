@@ -1,9 +1,9 @@
+'use client'
 import { UserInfo } from '@/components/userInfo'
-import { currentUser } from '@/lib/auth'
-import React from 'react'
+import { useCurrentUser } from '@/hooks/use-current-user'
 
-export default async function ServerPage() {
-    const user = await currentUser()
+export default function ServerPage() {
+    const user = useCurrentUser()
     return (
         <UserInfo
             user={user}
